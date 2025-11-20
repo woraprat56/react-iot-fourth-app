@@ -93,7 +93,7 @@ export default function ShowAllTodo() {
                 }
               </td>
               <td className='boder p-2 text-center'>
-                <Link to={'/updatetodo'}
+                <Link to={'/updatetodo/'+todo.id}
                       className='text-green-500 hover:text-green-700 mr-3'>
                 แก้ไข
                 </Link>

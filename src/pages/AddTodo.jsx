@@ -2,9 +2,33 @@ import React from 'react'
 import todo from './../assets/todo.png'
 import Footer from './../components/Footer'
 import { Link } from 'react-router-dom'
- 
+import { useState } from 'react'
+
 export default function AddTodo() {  
- 
+ const[todo_name, setTodoName] = useState('')
+ const[todo_detail, setTodoDetail] = useState('')
+ const[todo_complete, setTodoComplete] = useState(false)
+
+// ฟังก์ชันสำหรับการบันทึกข้อมูลไปยัง Table ใน Postges บน supabase
+const handleSaveClick = async () => {
+  // บันทึกข้อมูลไปยัง Table ใน Postges บน supabase
+const { error } = await supabase
+                        .from('todo')
+                        .insert({
+                          todo_name: todo_name,
+                          todo_detail: todo_detail,
+                          todo_complete: todo_complete
+                        })
+  // ตรวจสอบ error
+  if(error){
+    alert('ไม่สามารถบันทึกข้อมูลได้ กรุณาลองให่อีกครั้ง')
+    return;
+  }
+  // แสดงข้อความแจ้งผล และ redirect กลับไปที่หน้าจอ /showlltodo
+  alert('บันทึกข้อมูลเรียบร้อย')
+  window.location.href = '/showlltodo'
+}
+
   return (
     <div>
       <div className='w-8/12 border border-gray-200 shadow p-10 mx-auto mt-30 rounded'>
@@ -23,6 +47,7 @@ export default function AddTodo() {
               ชื่องาน
             </label>
             <input
+              value={todo_name} onClick = {(e) => setTodoName(e. target.value)}
               className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               type="text"
               placeholder="Enter todo name..."
@@ -34,6 +59,7 @@ export default function AddTodo() {
               รายละเอียดงาน
             </label>
             <input
+            value={todo_name} onClick = {(e) => setTodoDetail(e. target.value)}
               className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               type="text"
               placeholder="Enter todo detail..."
@@ -42,13 +68,18 @@ export default function AddTodo() {
  
           {/* เสร็จ ไม่เสร็จ */}
           <div className="flex  my-6">
-             <input type="radio" name="todo" value="1" className='mx-3'  />
-             เสร็จ
-             <input type="radio" name="todo" value="0"  className='mx-3' />
-             ไม่เสร็จ
+            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="username">
+              รายละเอียดงาน
+            </label>
+             <select className='w-full boder p-2 rounded'
+                      value={todo_complete == true? '1' : '0'}
+                      onChange={(e) => setTodoComplete(e.target.value == '1'? true : false)}>
+              <option value="1">เสร็จ</option>
+              <option value="0">ไม่เสร็จ</option>
+             </select>
           </div>
  
-          <button
+          <button onClick={handleSaveClick}
             className="bg-blue-500 hover:bg-blue-700 text-white w-full
             font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
             type="button"
