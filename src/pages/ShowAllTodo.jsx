@@ -32,10 +32,10 @@ export default function ShowAllTodo() {
   } , [])
 
   // สร้างฟังก์ชันจัดการลบข้อมูล
-  const handleDeteClick = asyns (id) => {
-    if( confirm('คุณต้องการลบข้อมูลหรือไม่ ?')){
+  const handleDeteClick = async (id) => {
+    if( confirm ('คุณต้องการลบข้อมูลหรือไม่ ?')) {
       // ลบข้อมูลออกจาก Table ใน Prostgres บน Supabase
-      const { error } = awit supabase
+      const { error } = await supabase
                             .from('todo')
                             .delete()
                             .eq('id', id)
@@ -61,6 +61,12 @@ export default function ShowAllTodo() {
         <h1 className='text-3xl text-center font-bold mt-4 text-blue-700'>
           ข้อมูลงานทั้งหมดที่ต้องทำ
         </h1>
+        <div className='mt-5 flex justify-end'>
+            <Link to={'/addtodo'} className='bg-blue-500 hover:bg-blue-700 text-white
+                                              font-bold py-2 px-4 rounded'>
+              เพิ่มงานใหม่
+            </Link>
+          </div>
 
         {/* ตารางแสดงข้อมูลที่ดึงมาจาก Subabase */}
         <table className='w-full boder mt-5'>
